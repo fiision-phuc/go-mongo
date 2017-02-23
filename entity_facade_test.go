@@ -120,8 +120,10 @@ func Test_EntityWithID(t *testing.T) {
 
 	// Reset database
 	session, database := GetMonotonicSession()
-	database.C("Test").DropCollection()
-	session.Close()
+	defer session.Close()
+
+	collection := database.C("Test")
+	defer collection.DropCollection()
 
 	// Testing process
 	err := EntityWithID("", bson.NewObjectId(), nil)
@@ -147,8 +149,10 @@ func Test_EntityWithCriteria(t *testing.T) {
 
 	// Reset database
 	session, database := GetMonotonicSession()
-	database.C("Test").DropCollection()
-	session.Close()
+	defer session.Close()
+
+	collection := database.C("Test")
+	defer collection.DropCollection()
 
 	// Testing process
 	err := EntityWithCriteria("", nil, nil)
@@ -166,17 +170,17 @@ func Test_EntityWithCriteria(t *testing.T) {
 		t.Errorf("Expected \"%s\"  but found \"%s\".", "Invalid entity object.", err.Error())
 	}
 
-	u := &user{}
+	var u user
 	id := bson.NewObjectId()
 	err = EntityWithID("Test", id, u)
 	if err == nil {
 		t.Errorf("Expected \"%s\"  but found \"%s\".", "not found", err.Error())
 	}
 
-	recordUser := &user{}
-	err = EntityWithCriteria("Test", bson.M{"_id": id}, recordUser)
-	if recordUser.UserID != id {
-		t.Errorf("Expected \"%s\" but found \"%s\".", id.Hex(), recordUser.UserID.Hex())
+	var recordUser user
+	err = EntityWithCriteria("Test", bson.M{"_id": id}, &recordUser)
+	if err == nil {
+		t.Errorf("Expected \"%s\"  but found \"%s\".", "not found", err.Error())
 	}
 }
 
@@ -189,7 +193,7 @@ func Test_SaveEntity(t *testing.T) {
 	defer session.Close()
 
 	collection := database.C("Test")
-	collection.DropCollection()
+	defer collection.DropCollection()
 
 	// Testing process
 	err := SaveEntity("", bson.NewObjectId(), nil)
@@ -241,7 +245,7 @@ func Test_DeleteEntity(t *testing.T) {
 	defer session.Close()
 
 	collection := database.C("Test")
-	collection.DropCollection()
+	defer collection.DropCollection()
 
 	u := &user{
 		UserID:   bson.NewObjectId(),
@@ -284,7 +288,7 @@ func Test_DeleteEntityWithCriteria(t *testing.T) {
 	defer session.Close()
 
 	collection := database.C("Test")
-	collection.DropCollection()
+	defer collection.DropCollection()
 
 	u := &user{
 		UserID:   bson.NewObjectId(),
