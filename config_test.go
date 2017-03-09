@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/phuc0302/go-oauth2/util"
+	"github.com/phuc0302/go-server/util"
 )
 
 func Test_CreateMongoConfigs(t *testing.T) {

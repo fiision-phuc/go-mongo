@@ -4,8 +4,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/phuc0302/go-oauth2/test"
-
 	"gopkg.in/mgo.v2"
 )
 

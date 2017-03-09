@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/phuc0302/go-oauth2/util"
+	"github.com/phuc0302/go-server/util"
 )
 
 // ConfigFile defines configuration file's name.
